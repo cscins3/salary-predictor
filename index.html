@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>薪資預測器</title>
+</head>
+<body>
+    <h1>薪資預測器</h1>
+    <form id="predictForm">
+        <label>門診人次: <input type="number" id="op_visits" required></label><br>
+        <label>門診診療: <input type="number" id="op_services" required></label><br>
+        <label>住院人日: <input type="number" id="ip_days" required></label><br>
+        <label>住院診療: <input type="number" id="ip_services" required></label><br>
+        <label>檢查: <input type="number" id="exams" required></label><br>
+        <button type="submit">預測薪資</button>
+    </form>
+
+    <h2 id="result"></h2>
+
+    <script>
+        const weights = {
+            op_visits: 0.005005,
+            op_services: 0.545631,
+            ip_days: 0.005773,
+            ip_services: 0.165277,
+            exams: 2.106420,
+            bias: -4996.40
+        };
+
+        document.getElementById('predictForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const op_visits = parseFloat(document.getElementById('op_visits').value);
+            const op_services = parseFloat(document.getElementById('op_services').value);
+            const ip_days = parseFloat(document.getElementById('ip_days').value);
+            const ip_services = parseFloat(document.getElementById('ip_services').value);
+            const exams = parseFloat(document.getElementById('exams').value);
+
+            const predicted_salary = 
+                op_visits * weights.op_visits +
+                op_services * weights.op_services +
+                ip_days * weights.ip_days +
+                ip_services * weights.ip_services +
+                exams * weights.exams +
+                weights.bias;
+
+            document.getElementById('result').innerText = '預測薪資: ' + predicted_salary.toFixed(0) + ' 元';
+        });
+    </script>
+</body>
+</html>
